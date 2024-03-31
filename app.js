@@ -20,8 +20,8 @@ const User = require("./models/user");
 const mongoSanitize = require("express-mongo-sanitize");
 const session = require("express-session");
 const MongoStore = require("connect-mongo");
-//const dbUrl = process.env.DB_URL;
-const dbUrl = "mongodb://127.0.0.1/campground";
+const dbUrl = process.env.DB_URL;
+//const dbUrl = "mongodb://127.0.0.1/campground";
 
 const userRoutes = require("./routes/users");
 const campgroundRoutes = require("./routes/campgrounds");

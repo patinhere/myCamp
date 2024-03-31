@@ -5,8 +5,13 @@ const GeoData = require("../models/geoData");
 const imageSample = require("./images");
 const park = require("./park");
 const campground = require("../models/campground");
+//const MongoStore = require("connect-mongo");
+//const session = require("express-session");
+const dbUrl = process.env.DB_URL;
 
-mongoose.connect("mongodb://127.0.0.1/campground");
+mongoose.connect(
+  "mongodb+srv://first-user:Fuckworld26@cluster0.d88dmfg.mongodb.net/?retryWrites=true&w=majority"
+);
 
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "conection error:"));
