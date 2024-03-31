@@ -63,7 +63,7 @@ const seedDB = async () => {
       caravans: `${campSite[i].caravans}`,
       trailers: `${campSite[i].trailers}`,
       car: `${campSite[i].car}`,
-      author: "65fb78b7ab0a00d5ddff0ffa",
+      author: "66097fdc128fea44ca6f2152",
       id: i + 1,
     });
 
