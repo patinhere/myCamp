@@ -9,6 +9,7 @@
       novalidate
       class="validated-form"
       enctype="multipart/form-data"
+      onsubmit="disableButton()"
     >
       <div class="mb-3">
         <label for="name" class="form-label">Name</label>
@@ -17,10 +18,11 @@
           type="text"
           id="name"
           name="campground[name]"
+          onkeypress="return blockSpecialChar(event)"
+          maxlength="50"
           value="<%= campground.name %>"
           required
         />
-        <div class="valid-feedback">Looks good</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="location">Location</label>
@@ -29,10 +31,11 @@
           type="text"
           id="location"
           name="campground[location]"
+          onkeypress="return blockSpecialChar(event)"
+          maxlength="30"
           value="<%= campground.location %>"
           required
         />
-        <div class="valid-feedback">Looks good</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="image">Add Images </label>
@@ -50,6 +53,8 @@
           class="form-control"
           type="text"
           id="description"
+          maxlength="200"
+          onkeypress="return blockSpecialChar(event)"
           rows="7"
           name="campground[description]"
           required
@@ -57,7 +62,6 @@
         
         <%= campground.description %></textarea
         >
-        <div class="valid-feedback">Looks good</div>
       </div>
       <div class="mb-3">
         <% campground.images.forEach(function(img, i) { %>
@@ -74,7 +78,9 @@
         <% }) %>
       </div>
       <div class="mb-3">
-        <button class="btn btn-success">Update Campground</button>
+        <button id="editButton" type="submit" class="btn btn-success">
+          Update Campground
+        </button>
       </div>
     </form>
     <a
@@ -84,3 +90,11 @@
     >
   </div>
 </div>
+
+<script>
+  function disableButton() {
+    var btn = document.getElementById("editButton");
+    btn.disabled = true;
+    btn.innerText = "Loading...";
+  }
+</script>

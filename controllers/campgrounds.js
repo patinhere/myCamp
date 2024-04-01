@@ -35,6 +35,17 @@ module.exports.createCampground = async (req, res, next) => {
 
   const geolongla = geoData.body.features[0].geometry.coordinates;
 
+  if (
+    parseFloat(geolongla[1]) >= -28 ||
+    parseFloat(geolongla[1]) <= -37 ||
+    parseFloat(geolongla[0]) >= 153 ||
+    parseFloat(geolongla[0]) <= 141
+  ) {
+    req.flash("error", "The location is not in NSW");
+    res.redirect(`/campgrounds/new`);
+    return;
+  }
+
   const campground = new Campground(req.body.campground);
   campground.longitude = geolongla[0];
   campground.latitude = geolongla[1];
@@ -44,6 +55,7 @@ module.exports.createCampground = async (req, res, next) => {
   }));
   campground.author = req.user._id;
   await campground.save();
+
   req.flash("success", "Successfully made a new campground!");
   res.redirect(`/campgrounds/${campground._id}`);
 };
@@ -65,6 +77,7 @@ module.exports.renderEditForm = async (req, res, next) => {
   if (!campground) {
     req.flash("error", "Cannot find that campground!");
     res.redirect("/campgrounds");
+    return;
   }
   res.render("campgrounds/edit", { campground });
 };
@@ -72,15 +85,41 @@ module.exports.renderEditForm = async (req, res, next) => {
 module.exports.updateCampground = async (req, res, next) => {
   if (!req.body.campground) throw new ExpressError("Campground Not Found", 400);
 
+  const geoData = await geocoder
+    .forwardGeocode({
+      query: req.body.campground.location,
+      limit: 1,
+    })
+    .send();
+
+  const geolongla = geoData.body.features[0].geometry.coordinates;
   const { id } = req.params;
+
+  if (
+    parseFloat(geolongla[1]) >= -28 ||
+    parseFloat(geolongla[1]) <= -37 ||
+    parseFloat(geolongla[0]) >= 153 ||
+    parseFloat(geolongla[0]) <= 141
+  ) {
+    req.flash("error", "The location is not in NSW");
+    res.redirect(`/campgrounds/${id}/edit`);
+    return;
+  }
+
   const campground = await Campground.findByIdAndUpdate(id, {
     ...req.body.campground,
   });
+  campground.longitude = geolongla[0];
+  campground.latitude = geolongla[1];
+  await campground.save();
+
+  //console.log(campground);
   const imgs = req.files.map((multer) => ({
     url: multer.path,
     filename: multer.filename,
   }));
   campground.images.push(...imgs);
+
   await campground.save();
   if (req.body.deleteImages) {
     for (let filename of req.body.deleteImages) {

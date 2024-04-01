@@ -9,6 +9,7 @@
       novalidate
       class="validated-form"
       enctype="multipart/form-data"
+      onsubmit="disableButton()"
     >
       <div class="mb-3">
         <label for="name" class="form-label">Name</label>
@@ -17,9 +18,10 @@
           type="text"
           id="name"
           name="campground[name]"
+          onkeypress="return blockSpecialChar(event)"
+          maxlength="50"
           required
         />
-        <div class="valid-feedback">Looks good</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="location">Location</label>
@@ -28,9 +30,10 @@
           type="text"
           id="location"
           name="campground[location]"
+          onkeypress="return blockSpecialChar(event)"
+          maxlength="30"
           required
         />
-        <div class="valid-feedback">Looks good</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="image">Images </label>
@@ -42,7 +45,6 @@
           multiple
           required
         />
-        <div class="valid-feedback">Looks good</div>
       </div>
       <div class="mb-3">
         <label class="form-label" for="description">Description</label>
@@ -52,16 +54,27 @@
           id="description"
           name="campground[description]"
           rows="7"
+          maxlength="200"
+          onkeypress="return blockSpecialChar(event)"
           required
         ></textarea>
-        <div class="valid-feedback">Looks good</div>
       </div>
       <div class="mb-3">
-        <button class="btn btn-success">Add Campground</button>
+        <button id="addButton" type="submit" class="btn btn-success">
+          Add Campground
+        </button>
       </div>
     </form>
     <a class="text-secondary text-decoration-none" href="/campgrounds"
-      ><small>&#8810;All Campgrounds</small></a
-    >
+      ><small>&#8810;All Campgrounds</small>
+    </a>
   </div>
 </div>
+
+<script>
+  function disableButton() {
+    var btn = document.getElementById("addButton");
+    btn.disabled = true;
+    btn.innerText = "Loading...";
+  }
+</script>

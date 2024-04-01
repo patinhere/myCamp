@@ -19,10 +19,11 @@
                 type="text"
                 id="username"
                 name="username"
+                maxlength="50"
+                onkeypress="return blockSpecialChar(event)"
                 required
                 autofocus
               />
-              <div class="valid-feedback">Looks good</div>
             </div>
             <div class="mb-3">
               <label for="password" class="form-label">Password</label>
@@ -31,9 +32,9 @@
                 type="password"
                 id="password"
                 name="password"
+                maxlength="50"
                 required
               />
-              <div class="valid-feedback">Looks good</div>
             </div>
             <div class="mb-3 d-grid gap-2">
               <button class="btn btn-success">Log in</button>

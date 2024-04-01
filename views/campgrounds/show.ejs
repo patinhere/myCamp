@@ -64,6 +64,7 @@
       action="/campgrounds/<%=campground._id%>/reviews"
       method="POST"
       class="mb-3 validated-form"
+      onsubmit="disableButton()"
       novalidate
     >
       <div class="mb-0 offset-5">
@@ -87,11 +88,12 @@
           class="form-control"
           name="review[body]"
           id="body"
+          maxlength="200"
           required
         ></textarea>
-        <div class="valid-feedback">Looks good</div>
+        
       </div>
-      <button class="btn btn-success mb-5">Submit</button>
+      <button id="reviewButton" type="submit" class="btn btn-success mb-5">Submit</button>
     </form>
 
     <% for (let review of campground.reviews){ %>
@@ -122,3 +124,11 @@
   const locate = '<%=campground.location%>';
 </script>
 <script src="/javascripts/showPageMap.js"></script>
+
+<script>
+  function disableButton() {
+    var btn = document.getElementById("reviewButton");
+    btn.disabled = true;
+    btn.innerText = "Loading...";
+  }
+</script>

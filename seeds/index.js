@@ -84,7 +84,10 @@ const seedDB = async () => {
       },
     });
 
-    console.log(geo);
+    //camp.GeoData = geo._id;
+    // await camp.save();
+    //console.log(geo);
+    // console.log(camp);
     await geo.save();
   }
 };
