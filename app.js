@@ -27,8 +27,8 @@ const userRoutes = require("./routes/users");
 const campgroundRoutes = require("./routes/campgrounds");
 const reviewRoutes = require("./routes/reviews");
 
-//mongoose.connect("mongodb://127.0.0.1/campground");
-mongoose.connect(dbUrl);
+mongoose.connect(dbUrl || "mongodb://127.0.0.1/campground");
+//mongoose.connect(dbUrl);
 
 const store = MongoStore.create({
   mongoUrl: dbUrl,
