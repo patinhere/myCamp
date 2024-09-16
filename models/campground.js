@@ -1,18 +1,19 @@
-const mongoose = require("mongoose");
 const Review = require("./review");
+
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+// Image scheme
 const ImageSchema = new Schema({
   url: String,
   filename: String,
 });
-
 ImageSchema.virtual("thumbnail").get(function () {
   return this.url.replace("/upload", "/upload/w_200");
 });
 
+// campsite schema
 const opts = { toJSON: { virtual: true } };
-
 const CampgroundSchema = new Schema(
   {
     name: String,
@@ -50,10 +51,11 @@ const CampgroundSchema = new Schema(
   opts
 );
 
+// function get ID
 CampgroundSchema.virtual("properties.UrlId").get(function () {
   return this._id;
 });
-
+// function delete review
 CampgroundSchema.post("findOneAndDelete", async function (doc) {
   if (doc) {
     await Review.deleteMany({

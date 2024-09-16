@@ -1,16 +1,19 @@
 const Campground = require("../models/campground");
-const GeoData = require("../models/geoData");
+
 const ExpressError = require("../utils/ExpressError");
+const { cloudinary } = require("../cloudinary");
+
+// Geodata
+const GeoData = require("../models/geoData");
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
 const mapBoxToken = process.env.MAPBOX_TOKEN;
 const geocoder = mbxGeocoding({ accessToken: mapBoxToken });
-const { cloudinary } = require("../cloudinary");
-const geoData = require("../models/geoData");
 
+// show all camps
 module.exports.index = async (req, res, next) => {
   const campgrounds = await Campground.find({});
   const geodatas = await GeoData.find({});
-  // console.log(geodatas);
+
   if (!campgrounds) {
     console.log("404");
     return next(new ExpressError("Campground Not Found", 404));
@@ -18,10 +21,12 @@ module.exports.index = async (req, res, next) => {
   res.render("campgrounds/index", { campgrounds, geodatas });
 };
 
+// show create form
 module.exports.renderNewForm = (req, res) => {
   res.render("campgrounds/new");
 };
 
+// create camp
 module.exports.createCampground = async (req, res, next) => {
   if (!req.body.campground)
     throw new ExpressError("Invalid Campground Data, 400");
@@ -60,6 +65,7 @@ module.exports.createCampground = async (req, res, next) => {
   res.redirect(`/campgrounds/${campground._id}`);
 };
 
+// show one camp
 module.exports.showCampground = async (req, res, next) => {
   const campground = await Campground.findById(req.params.id)
     .populate({ path: "reviews", populate: { path: "author" } })
@@ -71,6 +77,7 @@ module.exports.showCampground = async (req, res, next) => {
   res.render("campgrounds/show", { campground });
 };
 
+// show edit form
 module.exports.renderEditForm = async (req, res, next) => {
   const { id } = req.params;
   const campground = await Campground.findById(id);
@@ -82,6 +89,7 @@ module.exports.renderEditForm = async (req, res, next) => {
   res.render("campgrounds/edit", { campground });
 };
 
+// edit camp
 module.exports.updateCampground = async (req, res, next) => {
   if (!req.body.campground) throw new ExpressError("Campground Not Found", 400);
 
@@ -133,6 +141,7 @@ module.exports.updateCampground = async (req, res, next) => {
   res.redirect(`/campgrounds/${campground._id}`);
 };
 
+// delete camp
 module.exports.deleteCampground = async (req, res, next) => {
   const { id } = req.params;
   await Campground.findByIdAndDelete(id);
