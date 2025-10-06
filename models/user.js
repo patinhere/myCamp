@@ -10,5 +10,11 @@ const UserSchema = new Schema({
   },
 });
 
+// automatic store user in req.user and  password
+// UserModel.register(req.user,req.password)  -> create new user
+// req.logout()
+// req.isAuthenticated()  ->   check if already login
+// passport.authenticate("local", {})  ->   check if user password correct
+
 UserSchema.plugin(passportLocalMongoose);
 module.exports = mongoose.model("User", UserSchema);
